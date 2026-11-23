@@ -1,17 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: {{ .Release.Name }}-error-rate-check
+  name: aegis-service-error-rate-check
 spec:
   metrics:
     - name: error-rate
       interval: 30s
-      successCondition: result[0] <= 0.01
+      count: 5
       failureLimit: 2
+      successCondition: result[0] <= 0.01
       provider:
         prometheus:
           address: http://kube-prometheus-stack-prometheus.monitoring:9090
           query: |
-            sum(rate(http_requests_total{status=~"5.*",app="{{ .Release.Name }}"}[1m])) 
-            / 
-            sum(rate(http_requests_total{app="{{ .Release.Name }}"}[1m]))
+            sum(rate(http_requests_total{status=~"5.*",app="aegis-service"}[1m]))
+            /
+            sum(rate(http_requests_total{app="aegis-service"}[1m]))
