@@ -8,15 +8,24 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/aegis-gitops.git'
+    repoURL: 'https://github.com/bvsrujan02-a11y/AegisOps.git'
     targetRevision: HEAD
-    path: charts/aegis-service
+    path: charts/Aegis-service
     helm:
       valueFiles:
         - values.yaml
+      parameters:
+        - name: image.repository
+          value: srujan078/aegis-app
+        - name: image.tag
+          value: "1.0.0"
+        - name: image.pullPolicy
+          value: IfNotPresent
+        - name: replicaCount
+          value: "1"
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: production
+    namespace: aegis-dev
   syncPolicy:
     automated:
       prune: true
